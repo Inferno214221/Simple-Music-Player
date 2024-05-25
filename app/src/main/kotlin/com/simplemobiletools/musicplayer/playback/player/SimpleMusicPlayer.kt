@@ -67,7 +67,10 @@ class SimpleMusicPlayer(private val exoPlayer: ExoPlayer) : ForwardingPlayer(exo
 
     override fun seekToPrevious() {
         play()
-        if (!maybeForcePrevious()) {
+        // If the user is more than 10 seconds into the track, restart it
+        if (super.getCurrentPosition() > 10000) {
+            super.seekToDefaultPosition()
+        } else if (!maybeForcePrevious()) {
             seekToPreviousCount += 1
             seekWithDelay()
         }
